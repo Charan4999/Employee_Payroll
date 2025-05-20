@@ -1,12 +1,20 @@
 package com.example.intro.Model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "employee_payroll")
 public class Model {
-    public Model(int i, String name2, long salary2) {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    public Model() {
 		// TODO Auto-generated constructor stub
 	}
 	public int getId() {
@@ -27,7 +35,6 @@ public class Model {
 	public void setSalary(long salary) {
 		this.salary = salary;
 	}
-	private int id;
-    private String name;
+	private String name;
     private long salary;
 }

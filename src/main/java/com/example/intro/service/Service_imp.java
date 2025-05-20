@@ -2,34 +2,34 @@ package com.example.intro.service;
 
 import com.example.intro.dto.dto;
 import com.example.intro.Model.Model;
+import com.example.intro.repository.repository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
-public abstract class Service_imp implements service {
+public class Service_imp implements service {
 
-    private List<Model> employeeList = new ArrayList<>();
-    private int currentId = 1;
+    @Autowired
+    private repository repository;
 
     @Override
     public List<Model> getAllEmployees() {
-        return employeeList;
+        return repository.findAll(); 
     }
 
     @Override
     public Model getEmployeeById(int empId) {
-        return employeeList.stream()
-                .filter(emp -> emp.getId() == empId)
-                .findFirst()
-                .orElse(null);
+        return repository.findById(empId).orElse(null); 
     }
 
     @Override
     public Model createEmployee(dto dto) {
-        Model emp = new Model(currentId++, dto.getName(), dto.getSalary());
-        employeeList.add(emp);
-        return emp;
+        Model emp = new Model();
+        emp.setName(dto.getName());
+        emp.setSalary(dto.getSalary());
+        return repository.save(emp); 
     }
 
     @Override
@@ -38,12 +38,13 @@ public abstract class Service_imp implements service {
         if (emp != null) {
             emp.setName(dto.getName());
             emp.setSalary(dto.getSalary());
+            return repository.save(emp); 
         }
-        return emp;
+        return null;
     }
 
     @Override
     public void deleteEmployee(int empId) {
-        employeeList.removeIf(emp -> emp.getId() == empId);
+        repository.deleteById(empId); 
     }
 }
